@@ -78,7 +78,6 @@ export abstract class Core {
         let reply: any = {status: "failed"};
 
         if (this.messageHandlers.has(messageType)) {
-            // TODO: We're passing null on thisArg, this may actually be bad.
             try {
                 reply = await this.messageHandlers.get(messageType)?.call(null, json);
             } catch (err) {
