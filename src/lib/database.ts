@@ -7,7 +7,13 @@ export abstract class Database {
     private static client: PrismaClient;
 
     static async initialize() {
+        dbLog.info("Creating Prisma client.");
         this.client = new PrismaClient();
+
+        dbLog.info("Connecting to the database.");
+        await this.client.$connect();
+
+        dbLog.info("Ready.");
     }
 
     static getClient() {

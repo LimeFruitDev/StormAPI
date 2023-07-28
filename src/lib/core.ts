@@ -59,6 +59,8 @@ export abstract class Core {
     }
 
     static async setupConnection(socket: ws.WebSocket) {
+        coreLog.trace("Receiving new connection.");
+
         socket.on("message", async (data, isBinary) => {
             if (isBinary) {
                 coreLog.error("Received raw binary data from the server, rejecting.");
@@ -66,6 +68,10 @@ export abstract class Core {
             }
 
             await this.messageReceivedCallback(socket, data.toString("utf8"));
+        });
+
+        socket.on("close", async () => {
+            coreLog.trace("An active connection was closed.");
         });
     }
 

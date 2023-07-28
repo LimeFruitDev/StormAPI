@@ -5,6 +5,7 @@ import {Core} from "./lib/core";
 const entryLog = new Logger();
 
 async function main() {
+    entryLog.info(`Startup: ${Date()}`)
     Core.initialize();
 }
 
