@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Player {
+  id         String      @id
+  steamName  String      @map("steam_name")
+  steamId    String      @map("steam_id")
+  firstSeen  DateTime    @default(now()) @map("first_seen")
+  lastSeen   DateTime    @default(now()) @map("last_seen")
+  whitelists String[]    @default([])
+  blacklists String[]    @default([])
+  data       Json        @default("{}")
+  Characters Character[]
+
+  @@map("players")
+}
+
+model Character {
+  id       String @id
+  playerId String
+  player   Player @relation(fields: [playerId], references: [id])
+  name     String
+  model    String
+  faction  String
+  data     Json   @default("{}")
+
+  @@map("characters")
+}
+
+model Inventory {
+  id    String @id
+  type  String
+  items Item[]
+
+  @@map("inventories")
+}
+
+model Item {
+  id          String    @id
+  inventoryId String    @map("inventory_id")
+  inventory   Inventory @relation(fields: [inventoryId], references: [id])
+  properties  Json      @default("{}")
+
+  @@map("items")
+}
