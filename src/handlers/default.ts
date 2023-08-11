@@ -79,4 +79,28 @@ export abstract class DefaultHandlers {
             status: "success"
         }
     }
+
+    /*
+        Item
+     */
+    static async saveItem(json: any) {
+        await Database.getClient().item.upsert({
+            where: {
+                id: json["uniqueId"]
+            },
+            create: {
+                id: json["uniqueId"] as string,
+                inventoryId: json["inventoryId"] as string,
+                properties: json["properties"] as string
+            },
+            update: {
+                inventoryId: json["inventoryId"] as string,
+                properties: json["properties"] as string
+            }
+        });
+
+        return {
+            status: "success"
+        }
+    }
 }
