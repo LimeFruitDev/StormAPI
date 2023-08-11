@@ -10,32 +10,20 @@ export abstract class DefaultHandlers {
     /*
         Player
      */
-    static async commitPlayer(json: any) {
+    static async savePlayer(json: any) {
         await Database.getClient().player.upsert({
+            where: {
+                id: json["playerId"] as string
+            },
             create: {
                 id: json["playerId"] as string,
+                steamId: json["steamId"] as string,
                 steamName: json["steamName"] as string,
-                steamId: json["steamId"] as string
+                whitelists: json["whitelist"] as string[],
+                blacklists: json["blacklist"] as string[],
+                data: json["data"] as string
             },
             update: {
-                lastSeen: new Date()
-            },
-            where: {
-                id: json["playerId"] as string
-            }
-        })
-
-        return {
-            status: "success"
-        }
-    }
-
-    static async savePlayer(json: any) {
-        await Database.getClient().player.update({
-            where: {
-                id: json["playerId"] as string
-            },
-            data: {
                 steamName: json["steamName"] as string,
                 whitelists: json["whitelist"] as string[],
                 blacklists: json["blacklist"] as string[],
@@ -65,28 +53,21 @@ export abstract class DefaultHandlers {
     /*
         Character
      */
-    static async commitCharacter(json: any) {
-        await Database.getClient().character.create({
-            data: {
+    static async saveCharacter(json: any) {
+        await Database.getClient().character.upsert({
+            where: {
+                id: json["characterId"] as string
+            },
+            create: {
                 id: json["characterId"] as string,
                 playerId: json["playerId"] as string,
                 name: json["name"] as string,
                 model: json["model"] as string,
-                faction: json["faction"] as string
-            }
-        });
-
-        return {
-            status: "success"
-        }
-    }
-
-    static async saveCharacter(json: any) {
-        await Database.getClient().character.update({
-            where: {
-                id: json["characterId"] as string
+                faction: json["faction"] as string,
+                data: json["data"] as string
             },
-            data: {
+            update: {
+                // TODO: Maybe allow swapping around playerIds to transfer characters?
                 name: json["name"] as string,
                 model: json["model"] as string,
                 faction: json["faction"] as string,
