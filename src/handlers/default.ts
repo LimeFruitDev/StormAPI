@@ -11,13 +11,19 @@ export abstract class DefaultHandlers {
         Player
      */
     static async commitPlayer(json: any) {
-        await Database.getClient().player.create({
-            data: {
+        await Database.getClient().player.upsert({
+            create: {
                 id: json["playerId"] as string,
                 steamName: json["steamName"] as string,
                 steamId: json["steamId"] as string
+            },
+            update: {
+                lastSeen: new Date()
+            },
+            where: {
+                id: json["playerId"] as string
             }
-        });
+        })
 
         return {
             status: "success"
