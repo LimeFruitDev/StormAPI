@@ -86,10 +86,10 @@ export abstract class DefaultHandlers {
     static async saveItem(json: any) {
         await Database.getClient().item.upsert({
             where: {
-                id: json["uniqueId"]
+                id: json["itemId"]
             },
             create: {
-                id: json["uniqueId"] as string,
+                id: json["itemId"] as string,
                 inventoryId: json["inventoryId"] as string,
                 properties: json["properties"] as string
             },
