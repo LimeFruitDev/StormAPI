@@ -32,7 +32,7 @@ export abstract class Core {
             await this.setupConnection(socket);
         });
 
-        this.httpServer.listen(process.env.PORT || 8999, () => {
+        this.httpServer.listen(process.env.PORT || 8080, () => {
             coreLog.info(`Listening on port ${(this.httpServer.address() as ws.AddressInfo).port}`);
         });
 
